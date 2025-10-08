@@ -1,0 +1,75 @@
+name: Q6
+
+on:
+  push:
+    branches: ['master']
+
+permissions:
+  contents: write
+
+env:
+  FULL_NAME: "Julien Oyer"
+
+jobs:
+  archive-q6:
+    name: Créer et pousser Q6_archive_JJ-MM-AAAA-HHMMSS.txt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Générer Q6_archive_JJ-MM-AAAA-HHMMSS.txt et Q6_différences.txt
+        shell: bash
+        run: |
+          if [ ! -f Q6.java ]; then
+            echo "Q6.java introuvable à la racine du dépôt." >&2
+            exit 1
+          fi
+
+          DATE="$(date +'%d-%m-%Y-%H%M%S')"   # JJ-MM-AAAA-HHMMSS
+          ARCHIVE="Q6_archive_${DATE}.txt"
+          DIFF_FILE="Q6_différences.txt"
+
+          # Tailles via wc
+          CHAR_COUNT="$(wc -c < Q6.java | tr -d ' ')"
+          LINE_COUNT="$(wc -l < Q6.java | tr -d ' ')"
+
+          {
+            echo "# Archive Java (Q6)"
+            echo ""
+            echo "- Nom et prénom: ${FULL_NAME}"
+            echo "- Date: ${DATE}"
+            echo "- Taille Q6.java: ${CHAR_COUNT} caractères, ${LINE_COUNT} lignes"
+            echo ""
+            echo "---"
+            echo "## Contenu de Q6.java"
+            echo '```java'
+            cat Q6.java
+            echo '```'
+          } > "${ARCHIVE}"
+
+          PREV="$(ls -1t Q6_archive_*.txt 2>/dev/null | sed -n '2p' || true)"
+
+          if [ -n "$PREV" ] && [ -f "$PREV" ]; then
+            diff -u "$PREV" "$ARCHIVE" > "$DIFF_FILE" || true
+          else
+            echo "Aucun fichier d'archive précédent trouvé." > "$DIFF_FILE"
+          fi
+
+      - name: Commit si changement
+        shell: bash
+        run: |
+          DATE="$(date +'%d-%m-%Y-%H%M%S')"   # JJ-MM-AAAA-HHMMSS
+          ARCHIVE="Q6_archive_${DATE}.txt"
+          DIFF_FILE="Q6_différences.txt"
+
+          git add "${ARCHIVE}" "${DIFF_FILE}"
+          if git diff --cached --quiet; then
+            echo "Aucun changement à committer."
+            exit 0
+          fi
+          git config user.name  "Jujedie"
+          git config user.email "oyer.ludovic@gmail.com"
+          git commit -m "Q6: générer ${ARCHIVE} et Q6_différences.txt [skip ci]"
+          
+          git push
