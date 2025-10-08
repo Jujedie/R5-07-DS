@@ -1,4 +1,4 @@
-name: Q1
+name: Q2
 
 on:
   push:
@@ -41,8 +41,10 @@ jobs:
           # Ajoute le contenu du TOTO
           cat TOTO.txt >> Q2_archive_TOTO.txt
 
-          echo "" >> Q2_archive_TOTO.txt
-          echo "## Taille de TOTO.txt : 20 Bytes" >> Q2_archive_TOTO.txt
+          {
+            echo ""
+            echo "## Taille de TOTO.txt : 20 Bytes" 
+          } >> Q2_archive_TOTO.txt
 
       - name: Commit si changement
         run: |
