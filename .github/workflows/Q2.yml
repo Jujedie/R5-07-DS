@@ -43,7 +43,7 @@ jobs:
 
           {
             echo ""
-            echo "## Taille de TOTO.txt : 20 Bytes" 
+            echo "## Taille de TOTO.txt : $(stat --format="%s" TOTO.txt) Bytes"
           } >> Q2_archive_TOTO.txt
 
       - name: Commit si changement
