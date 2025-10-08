@@ -1,0 +1,22 @@
+# Archive Java (Q6)
+
+- Nom et prénom: Julien Oyer
+- Date: 08-10-2025-145250
+- Taille Q6.java: 220 caractères, 12 lignes
+
+---
+## Contenu de Q6.java
+```java
+public class Q6 {
+	public static void main(String[] a){
+		int n = Integer.parseInt(a[0]);
+
+		for(int i = 0; i < n; i++){
+			for(int j = n-1; j >= 0; j--)
+				System.out.print("x ");
+			
+			System.out.println();
+		}
+	}
+}
+```
