@@ -1,0 +1,60 @@
+name: Q5
+
+on:
+  push:
+    branches: ['master']
+    
+permissions:
+  contents: write
+
+jobs:
+  archive-q5:
+    name: Créer et pousser Q5_archive_JJ-MM-AAAA.txt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Générer Q5_archive_JJ-MM-AAAA.txt
+        shell: bash
+        run: |
+          if [ ! -f Q5.java ]; then
+            echo "Q5.java introuvable à la racine du dépôt." >&2
+            exit 1
+          fi
+
+          DATE="$(date +'%d-%m-%Y')"          # JJ-MM-AAAA
+          ARCHIVE="Q5_archive_${DATE}.txt"
+
+          {
+            echo "# Archive Java (Q5)"
+            echo ""
+            echo "- Nom et prénom: Julien Oyer"
+            echo "- Date: ${DATE}"
+            echo ""
+            echo "---"
+            echo "## Contenu de Q5.java"
+            echo '```java'
+            cat Q5.java
+            echo '```'
+          } > "${ARCHIVE}"
+
+          echo "ARCHIVE=${ARCHIVE}" >> "$GITHUB_ENV"
+
+      - name: Commit si changement
+        shell: bash
+        run: |
+          DATE="$(date +'%d-%m-%Y')"
+          ARCHIVE="Q5_archive_${DATE}.txt"
+
+          git add "${ARCHIVE}"
+          if git diff --cached --quiet; then
+            echo "Aucun changement à committer."
+            exit 0
+          fi
+
+          git config user.name  "Jujedie"
+          git config user.email "oyer.ludovic@gmail.com"
+          git commit -m "Q5: générer ${ARCHIVE}"
+
+          git push
