@@ -16,8 +16,6 @@ jobs:
       # 1) Récupérer le dépôt
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       # 2) Copier le contenu du README principal
       - name: Copier TOTO.txt -> Q1_archive_TOTO.txt
