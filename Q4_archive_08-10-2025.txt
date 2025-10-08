@@ -1,0 +1,22 @@
+# Archive Java (Q4)
+
+- Nom et prénom: Prénom Nom
+- Date: 08-10-2025
+
+---
+## Contenu de Q4.java
+```java
+public class Q4 {
+	public static void main(String[] a){
+		int n = Integer.parseInt(a[0]);
+
+		for(int i = 0; i < n; i++){
+
+			for(int j = 0; j < n; j++){
+				System.out.print(j+" ");
+			}
+			System.out.println();
+		}
+	}
+}
+```
