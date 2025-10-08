@@ -30,6 +30,4 @@ jobs:
           git add Q1_archive_TOTO.txt
           git commit -m "Q1: archive TOTO.md into Q1_archive_TOTO.txt"
 
-      - name: Push
-        run: |
           git push
