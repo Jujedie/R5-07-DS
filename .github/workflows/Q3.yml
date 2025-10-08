@@ -1,0 +1,120 @@
+name: Q3
+
+on:
+  push:
+    branches: ['master']
+
+permissions:
+  contents: write
+
+jobs:
+  archive-q3:
+    name: Créer et pousser Q3_archive_java.txt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Vérifier Q3.java et générer Q3_archive_java.txt
+        run: |
+          if [ ! -f Q3.java ]; then
+            echo "Q3.java introuvable à la racine du dépôt." >&2
+            exit 1
+          fi
+
+          {
+            echo "# Archive Java (Q3)"
+            echo ""
+            echo "- Nom et prénom: Julien Oyer"
+            echo ""
+            echo "---"
+            echo "## Contenu de Q3.java"
+            echo '```java'
+            cat Q3.java
+            echo '```'
+          } > Q3_archive_java.txt
+
+      - name: Commit si changement
+        run: |
+          if git diff --quiet -- Q3_archive_java.txt; then
+            echo "Aucun changement à committer."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Q3_archive_java.txt
+          git commit -m "Q3: générer Q3_archive_java.txt [skip ci]"
+
+      - name: Push
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          BRANCH="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+          git push origin "HEAD:${BRANCH}"
+```// filepath: /home/etudiant/oj230564/TP/s5/r5.07_automatisation_chaine_production/.github/workflows/Q3.yaml
+# Workflow: Q3
+# Objectif:
+#   - Générer Q3_archive_java.txt contenant:
+#       * Nom et prénom
+#       * Le contenu du fichier Q3.java
+#   - Commiter et pousser ce fichier dans le dépôt
+
+name: Q3
+
+on:
+  push:
+    branches: ['**']     # Sur tout push
+  workflow_dispatch:      # Lancement manuel
+
+permissions:
+  contents: write         # Requis pour pousser des commits
+
+env:
+  FULL_NAME: "Prénom Nom" # <-- Remplacez par vos nom et prénom
+
+jobs:
+  archive-q3:
+    name: Créer et pousser Q3_archive_java.txt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Vérifier Q3.java et générer Q3_archive_java.txt
+        run: |
+          if [ ! -f Q3.java ]; then
+            echo "Q3.java introuvable à la racine du dépôt." >&2
+            exit 1
+          fi
+
+          {
+            echo "# Archive Java (Q3)"
+            echo ""
+            echo "- Nom et prénom: ${FULL_NAME}"
+            echo ""
+            echo "---"
+            echo "## Contenu de Q3.java"
+            echo '```java'
+            cat Q3.java
+            echo '```'
+          } > Q3_archive_java.txt
+
+      - name: Commit si changement
+        run: |
+          if git diff --quiet -- Q3_archive_java.txt; then
+            echo "Aucun changement à committer."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Q3_archive_java.txt
+          git commit -m "Q3: générer Q3_archive_java.txt [skip ci]"
+
+      - name: Push
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          BRANCH="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+          git push origin "HEAD:${BRANCH}"

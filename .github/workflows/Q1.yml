@@ -22,6 +22,10 @@ jobs:
 
       - name: Commit si changement
         run: |
+          if git diff --quiet -- Q1_archive_TOTO.txt; then
+            echo "Aucun changement à committer."
+            exit 0
+          fi
 
           # Config auteur du commit
           git config user.name  "Jujedie"

@@ -48,6 +48,10 @@ jobs:
 
       - name: Commit si changement
         run: |
+          if git diff --quiet -- Q2_archive_TOTO.txt; then
+            echo "Aucun changement à committer."
+            exit 0
+          fi
 
           git config user.name  "Jujedie"
           git config user.email "oyer.ludovic@gmail.com"
