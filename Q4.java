@@ -3,7 +3,6 @@ public class Q4 {
 		int n = Integer.parseInt(a[0]);
 
 		for(int i = 0; i < n; i++){
-
 			for(int j = 0; j < n; j++){
 				System.out.print(j+" ");
 			}

@@ -1,0 +1,55 @@
+name: Q4
+
+on:
+  push:
+    branches: ['master']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  
+jobs:
+  archive-q4:
+    name: Créer et pousser Q4_archive_JJ-MM-AAAA.txt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Générer Q4_archive_JJ-MM-AAAA.txt
+        shell: bash
+        run: |
+          if [ ! -f Q4.java ]; then
+            echo "Q4.java introuvable à la racine du dépôt." >&2
+            exit 1
+          fi
+
+          DATE="$(date +'%d-%m-%Y')"
+          ARCHIVE="Q4_archive_${DATE}.txt"
+
+          {
+            echo "# Archive Java (Q4)"
+            echo ""
+            echo "- Nom et prénom: Julien Oyer"
+            echo "- Date: ${DATE}"
+            echo ""
+            echo "---"
+            echo "## Contenu de Q4.java"
+            echo '```java'
+            cat Q4.java
+            echo '```'
+          } > "${ARCHIVE}"
+
+      - name: Commit si changement
+        shell: bash
+        run: |
+          git add "${ARCHIVE}"
+          if git diff --cached --quiet; then
+            echo "Aucun changement à committer."
+            exit 0
+          fi
+          git config user.name  "Jujedie"
+          git config user.email "oyer.ludovic@gmail.com"
+          git commit -m "Q4: générer ${ARCHIVE}"
+          
+          git push
