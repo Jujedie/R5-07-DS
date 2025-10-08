@@ -1,0 +1,50 @@
+name: Q1
+
+on:
+  push:
+    branches: ['master']
+
+permissions:
+  contents: write
+
+jobs:
+  archive-readme:
+    name: Créer et pousser Q1_archive_README.md
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) Récupérer le dépôt
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2) Copier le contenu du README principal
+      - name: Copier TOTO.txt -> Q1_archive_TOTO.txt
+        run: |
+          # Échoue proprement si TOTO.txt est absent
+          if [ ! -f TOTO.txt ]; then
+            echo "TOTO.txt introuvable à la racine du dépôt." >&2
+            exit 1
+          fi
+          cp TOTO.txt Q1_archive_TOTO.txt
+
+      # 3) Commit uniquement si le contenu a changé
+      - name: Commit si changement
+        run: |
+          if git diff --quiet -- Q1_archive_TOTO.txt; then
+            echo "Aucun changement à committer."
+            exit 0
+          fi
+
+          # Config auteur du commit (personnalisé)
+          git config user.name  "jujedie"
+          git config user.email "oyer.ludovic@gmail.com"
+
+          git add Q1_archive_TOTO.txt
+          git commit -m "Q1: archive TOTO.md into Q1_archive_TOTO.txt"
+
+      # 4) Pousser le commit vers la même branche
+      - name: Push
+        run: |
+          git push
