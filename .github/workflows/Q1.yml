@@ -13,22 +13,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) Récupérer le dépôt
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2) Copier le contenu du README principal
       - name: Copier TOTO.txt -> Q1_archive_TOTO.txt
         run: |
           cp TOTO.txt Q1_archive_TOTO.txt
 
-      # 3) Commit uniquement si le contenu a changé
       - name: Commit si changement
         run: |
-          if git diff --quiet -- Q1_archive_TOTO.txt; then
-            echo "Aucun changement à committer."
-            exit 0
-          fi
 
           # Config auteur du commit
           git config user.name  "Jujedie"
@@ -37,7 +30,6 @@ jobs:
           git add Q1_archive_TOTO.txt
           git commit -m "Q1: archive TOTO.md into Q1_archive_TOTO.txt"
 
-      # 4) Pousser le commit vers la même branche
       - name: Push
         run: |
           git push
