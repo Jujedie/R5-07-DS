@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   archive-readme:
-    name: Créer et pousser Q1_archive_README.md
+    name: Créer et pousser Q1_archive_TOTO.md
     runs-on: ubuntu-latest
 
     steps:

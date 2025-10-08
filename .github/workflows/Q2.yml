@@ -1,0 +1,56 @@
+name: Q1
+
+on:
+  push:
+    branches: ['master']
+
+permissions:
+  contents: write
+
+jobs:
+  archive-readme:
+    name: Créer et pousser Q2_archive_TOTO.md
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Générer Q2_archive_TOTO.txt
+        run: |
+          # Vérifie la présence de TOTO.txt
+          if [ ! -f TOTO.txt ]; then
+            echo "TOTO.txt introuvable à la racine du dépôt." >&2
+            exit 1
+          fi
+
+          # Date/heure d’exécution (UTC)
+          RUN_DATE="$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+
+          {
+            echo "# Archive TOTO (Q2)"
+            echo ""
+            echo "- Nom et prénom: Julien Oyer"
+            echo "- Date d'exécution: ${RUN_DATE}"
+            echo ""
+            echo "---"
+            echo "## Contenu de TOTO.txt"
+            echo ""
+          } > Q2_archive_TOTO.txt
+
+          # Ajoute le contenu du TOTO
+          cat TOTO.txt >> Q2_archive_TOTO.txt
+
+      - name: Commit si changement
+        run: |
+
+          # Config auteur du commit
+          git config user.name  "Jujedie"
+          git config user.email "oyer.ludovic@gmail.com"
+
+          git add Q2_archive_TOTO.txt
+          git commit -m "Q1: archive TOTO.md into Q2_archive_TOTO.txt"
+
+      - name: Push
+        run: |
+          git push
