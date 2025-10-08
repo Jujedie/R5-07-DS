@@ -22,7 +22,6 @@ jobs:
       # 2) Copier le contenu du README principal
       - name: Copier TOTO.txt -> Q1_archive_TOTO.txt
         run: |
-          # Échoue proprement si TOTO.txt est absent
           if [ ! -f TOTO.txt ]; then
             echo "TOTO.txt introuvable à la racine du dépôt." >&2
             exit 1
@@ -37,8 +36,8 @@ jobs:
             exit 0
           fi
 
-          # Config auteur du commit (personnalisé)
-          git config user.name  "jujedie"
+          # Config auteur du commit
+          git config user.name  "Jujedie"
           git config user.email "oyer.ludovic@gmail.com"
 
           git add Q1_archive_TOTO.txt
