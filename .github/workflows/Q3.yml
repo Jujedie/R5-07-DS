@@ -36,6 +36,7 @@ jobs:
 
       - name: Commit si changement
         run: |
+          git add Q3_archive_java.txt
           if git diff -- Q3_archive_java.txt; then
             echo "Aucun changement à committer."
             exit 0
@@ -43,7 +44,7 @@ jobs:
 
           git config user.name  "Jujedie"
           git config user.email "oyer.ludovic@gmail.com"
-          git add Q3_archive_java.txt
+          
           git commit -m "Q3: générer Q3_archive_java.txt"
       
           git push 

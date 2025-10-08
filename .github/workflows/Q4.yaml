@@ -1,0 +1,75 @@
+# Workflow: Q4
+# Objectif:
+#   - Créer Q4_archive_JJ-MM-AAAA.txt contenant:
+#       * Nom et prénom (FULL_NAME)
+#       * Le contenu du fichier Q4.java
+#   - Commiter et pousser ce fichier dans le dépôt
+#
+# La date dans le nom du fichier est au format JJ-MM-AAAA.
+
+name: Q4
+
+on:
+  push:
+    branches: ['**']     # Sur tout push
+  workflow_dispatch:      # Lancement manuel
+
+permissions:
+  contents: write         # Requis pour pousser des commits
+
+env:
+  FULL_NAME: "Prénom Nom" # <-- Remplacez par vos nom et prénom
+
+jobs:
+  archive-q4:
+    name: Créer et pousser Q4_archive_JJ-MM-AAAA.txt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Générer Q4_archive_JJ-MM-AAAA.txt
+        shell: bash
+        run: |
+          if [ ! -f Q4.java ]; then
+            echo "Q4.java introuvable à la racine du dépôt." >&2
+            exit 1
+          fi
+
+          DATE="$(date +'%d-%m-%Y')"                # JJ-MM-AAAA
+          ARCHIVE="Q4_archive_${DATE}.txt"
+
+          {
+            echo "# Archive Java (Q4)"
+            echo ""
+            echo "- Nom et prénom: ${FULL_NAME}"
+            echo "- Date: ${DATE}"
+            echo ""
+            echo "---"
+            echo "## Contenu de Q4.java"
+            echo '```java'
+            cat Q4.java
+            echo '```'
+          } > "${ARCHIVE}"
+
+          echo "ARCHIVE=${ARCHIVE}" >> $GITHUB_ENV
+
+      - name: Commit si changement
+        shell: bash
+        run: |
+          git add "${ARCHIVE}"
+          if git diff --cached --quiet; then
+            echo "Aucun changement à committer."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Q4: générer ${ARCHIVE} [skip ci]"
+
+      - name: Push
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          BRANCH="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+          git push origin "HEAD:${BRANCH}"
