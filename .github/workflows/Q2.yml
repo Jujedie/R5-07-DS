@@ -49,7 +49,6 @@ jobs:
       - name: Commit si changement
         run: |
 
-          # Config auteur du commit
           git config user.name  "Jujedie"
           git config user.email "oyer.ludovic@gmail.com"
 
