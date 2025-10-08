@@ -43,6 +43,9 @@ jobs:
       - name: Commit si changement
         shell: bash
         run: |
+          DATE="$(date +'%d-%m-%Y')"
+          ARCHIVE="Q4_archive_${DATE}.txt"
+          
           git add "${ARCHIVE}"
           if git diff --cached --quiet; then
             echo "Aucun changement à committer."
