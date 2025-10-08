@@ -20,10 +20,6 @@ jobs:
       # 2) Copier le contenu du README principal
       - name: Copier TOTO.txt -> Q1_archive_TOTO.txt
         run: |
-          if [ ! -f TOTO.txt ]; then
-            echo "TOTO.txt introuvable à la racine du dépôt." >&2
-            exit 1
-          fi
           cp TOTO.txt Q1_archive_TOTO.txt
 
       # 3) Commit uniquement si le contenu a changé
