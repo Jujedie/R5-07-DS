@@ -1,6 +1,6 @@
 # Archive Java (Q4)
 
-- Nom et prénom: Prénom Nom
+- Nom et prénom: Julien Oyer
 - Date: 08-10-2025
 
 ---
@@ -11,10 +11,9 @@ public class Q4 {
 		int n = Integer.parseInt(a[0]);
 
 		for(int i = 0; i < n; i++){
-
-			for(int j = 0; j < n; j++){
+			for(int j = 0; j < n; j++)
 				System.out.print(j+" ");
-			}
+			
 			System.out.println();
 		}
 	}
