@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Vérifier Q3.java et générer Q3_archive_java.txt
         run: |
@@ -38,11 +36,8 @@ jobs:
 
       - name: Commit si changement
         run: |
-          if git diff --quiet -- Q3_archive_java.txt; then
-            echo "Aucun changement à committer."
-            exit 0
-          fi
           
+
           git config user.name  "Jujedie"
           git config user.email "oyer.ludovic@gmail.com"
           git add Q3_archive_java.txt
