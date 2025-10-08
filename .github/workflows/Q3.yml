@@ -36,7 +36,10 @@ jobs:
 
       - name: Commit si changement
         run: |
-          
+          if git diff -- Q3_archive_java.txt; then
+            echo "Aucun changement à committer."
+            exit 0
+          fi
 
           git config user.name  "Jujedie"
           git config user.email "oyer.ludovic@gmail.com"
